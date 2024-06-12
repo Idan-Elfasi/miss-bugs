@@ -5,8 +5,9 @@ import { bugService } from './services/bug.service.js'
 import { loggerService } from './services/logger.service.js'
 
 const app = express() 
+app.use(express.static('app-public'))
 
-
+// Express Routing:
 
 app.get('/api/bug', (req, res) =>{
     bugService.query()
@@ -20,7 +21,7 @@ app.get('/api/bug', (req, res) =>{
 
 app.get('/api/bug/save', (req, res) =>{
     const {_id,title,severity}=req.query
-    const bugToSave={_id:_id||'',title,severit:+severity,}
+    const bugToSave={_id:_id||'',title,severity:+severity,}
 
     bugService.save(bugToSave)
     .then(savedBug=>res.send(savedBug))
