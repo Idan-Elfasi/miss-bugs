@@ -20,8 +20,9 @@ app.get('/api/bug', (req, res) =>{
 })
 
 app.get('/api/bug/save', (req, res) =>{
-    const {_id,title,severity}=req.query
-    const bugToSave={_id:_id||'',title,severity:+severity,}
+    const {_id,title,severity,description}=req.query
+    
+    const bugToSave={_id:_id||'',title,severity:+severity,description}
 
     bugService.save(bugToSave)
     .then(savedBug=>res.send(savedBug))
