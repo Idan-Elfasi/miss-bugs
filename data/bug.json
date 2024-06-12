@@ -2,7 +2,7 @@
   {
     "_id": "abc123",
     "title": "new bug has born",
-    "severit": 4
+    "severity": 8
   },
   {
     "_id": "abc345",
@@ -28,6 +28,11 @@
   {
     "_id": "xcJ5w",
     "title": "new bug it is ",
-    "severit": 7
+    "severity": 7
+  },
+  {
+    "_id": "go9UY",
+    "title": "succses",
+    "severity": 55
   }
 ]
