@@ -55,3 +55,12 @@
 .fa.fa-behance::before {
     content: "\f1b4";
 }
+/* btn helper */
+.btn{
+    cursor: pointer;
+    background-color: var(--clr2bg);
+    margin: 0.5em;
+    border: 0;
+    padding: 0.5em 0.8em;
+    border-radius: 4px;
+}
