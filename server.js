@@ -1,49 +1,53 @@
-import express from 'express' 
+import express from 'express'
 
 
 import { bugService } from './services/bug.service.js'
 import { loggerService } from './services/logger.service.js'
+import { utilService } from './services/util.service.js'
 
-const app = express() 
+const app = express()
 app.use(express.static('app-public'))
 
 // Express Routing:
 
-app.get('/api/bug', (req, res) =>{
+app.get('/api/bug', (req, res) => {
     bugService.query()
-    .then(bugs=>res.send(bugs))
-    .catch(err=>{
-        console.log(err);
-        loggerService.error(`Couldn't get bugs `)
-        res.status(500).send(`Couldn't get bugs`)
-    })
+        .then(bugs => res.send(bugs))
+        .catch(err => {
+            console.log(err);
+            loggerService.error(`Couldn't get bugs `)
+            res.status(500).send(`Couldn't get bugs`)
+        })
 })
 
-app.get('/api/bug/save', (req, res) =>{
-    const {_id,title,severity,description}=req.query
-    
-    const bugToSave={_id:_id||'',title,severity:+severity,description}
+app.get('/api/bug/save', (req, res) => {
+    const { _id, title, severity, description } = req.query
+
+    const createdAt = utilService.makeCreatedAt()
+    const labels = utilService.makeLabels()
+
+    const bugToSave = { _id: _id || '', title, severity: +severity, description, createdAt: +createdAt, labels }
 
     bugService.save(bugToSave)
-    .then(savedBug=>res.send(savedBug))
+        .then(savedBug => res.send(savedBug))
 })
 
- app.get('/api/bug/:id', (req, res) =>{
-    const {id} = req.params
+app.get('/api/bug/:id', (req, res) => {
+    const { id } = req.params
 
     bugService.getById(id)
-    .then(bug => res.send(bug))
+        .then(bug => res.send(bug))
 
-}) 
- app.get('/api/bug/:id/remove', (req, res) =>{
-    const {id} = req.params
+})
+app.get('/api/bug/:id/remove', (req, res) => {
+    const { id } = req.params
     bugService.remove(id)
-    .then(() => res.send(`Bug ${id} deleted...`))
-}) 
-app.get('/puki', (req, res) =>{
+        .then(() => res.send(`Bug ${id} deleted...`))
+})
+app.get('/puki', (req, res) => {
 
     res.send(`Hello puki`)
-}) 
+})
 
 
 const port = 3030

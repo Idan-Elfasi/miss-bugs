@@ -8,9 +8,30 @@ export const utilService = {
     writeJsonFile,
     download,
     httpGet,
-    makeId
+    makeId,
+    makeLabels,
+    makeCreatedAt
+}
+function makeCreatedAt() {
+    var i = 0
+    var createdAt = ''
+    while (i < 13) {
+        createdAt += Math.floor(Math.random() * 10).toString()
+        i++
+    }
+    console.log('createdAt: ' + createdAt);
+    return createdAt
 }
 
+function makeLabels(arrSize = 3) {
+    var labels = ['critical', 'need-CR', 'dev-branch', 'romantic', 'dramatic', 'comedy', 'interesting']
+    var bugLabels = []
+    while (arrSize > 0) {
+        bugLabels.push(labels[[Math.floor(Math.random() * labels.length)]])
+        arrSize--
+    }
+    return bugLabels
+}
 
 function readJsonFile(path) {
     const str = fs.readFileSync(path, 'utf8')
@@ -66,6 +87,8 @@ function httpGet(url) {
     })
 
 }
+
+
 
 function makeId(length = 5) {
     let text = ''

@@ -26,6 +26,8 @@ export function BugDetails() {
         <h4>{bug.title}</h4>
         <p>Severity: <span>{bug.severity}</span></p>
         <p><span>description: </span>{bug.description}</p>
+        <p><span>bug labels: </span>{bug.labels.toString()}</p>
+        <p><span>bug createdAt time: </span>{bug.createdAt}</p>
         <Link to="/bug"> <button className='btn'>Back to List</button> </Link>
     </div>
 

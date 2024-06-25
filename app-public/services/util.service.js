@@ -1,8 +1,9 @@
 export const utilService = {
     makeId,
     makeLorem,
-    getRandomIntInclusive
+    getRandomIntInclusive,
 }
+
 
 function makeId(length = 6) {
     var txt = ''
