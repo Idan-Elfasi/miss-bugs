@@ -12,7 +12,15 @@ app.use(express.json())
 // Express Routing:
 
 app.get('/api/bug', (req, res) => {
-    bugService.query()
+    const filterBy = {
+        title: req.query.title || '',
+        severity: +req.query.severity || 0,
+        // pageIdx: +req.query.pageIdx || 0,
+        // sortBy: req.query.sortBy || '',
+        // sortDir: +req.query.sortDir || 1,
+        labels: req.query.labels || []
+    }
+    bugService.query(filterBy)
         .then(bugs => res.send(bugs))
         .catch(err => {
             console.log(err);
