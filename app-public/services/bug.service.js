@@ -31,13 +31,18 @@ function getById(bugId) {
     .then(res => res.data)
 }
 function remove(bugId) {
-    return axios.get(BASE_URL + '/' + bugId + '/remove')
+    return axios.delete(BASE_URL + '/' + bugId )
     .then(res => res.data)
 }
 function save(bug) {
-    const queryStr = `/save?title=${bug.title}&severity=${bug.severity}&_id=${bug._id || ''}&description=${bug.description}`
-    return axios.get(BASE_URL + queryStr)
+    if(bug._id){
+        return axios.put(BASE_URL + '/' + bug._Id ,bug)
         .then(res => res.data)
+    }
+    else{
+        return axios.post(BASE_URL ,bug)
+        .then(res => res.data)
+    }
 }
 function getEmptyBug(title = '', severity = '') {
     return { title, severity }
