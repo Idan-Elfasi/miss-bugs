@@ -9,6 +9,7 @@ export const bugService = {
     remove,
     getEmptyBug,
     getDefaultFilter,
+    getPageCount,
 }
 
 
@@ -37,10 +38,14 @@ function save(bug) {
         .then(res => res.data)
     }
 }
+
+function getPageCount(){
+    return axios.get(BASE_URL + '/pageCount').then(res => res.data)
+}
 function getEmptyBug(title = '', severity = '') {
     return { title, severity }
 }
 
 function getDefaultFilter() {
-    return { title: '', severity: '' }
+    return { title: '', severity: '',pageIdx:0 }
 }

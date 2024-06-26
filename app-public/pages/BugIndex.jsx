@@ -4,12 +4,18 @@ import { utilService } from '../services/util.service.js'
 import { BugList } from '../cmps/BugList.jsx'
 import { BugFilter } from '../cmps/BugFilter.jsx'
 
-const { useState, useEffect,useRef } = React
+const { useState, useEffect, useRef } = React
 
 export function BugIndex() {
   const [bugs, setBugs] = useState([])
   const [filterBy, setFilterBy] = useState(bugService.getDefaultFilter())
   const debouncedSetFilterBy = useRef(utilService.debounce(onSetFilterBy, 500))
+  const [pageCount, setPageCount] = useState(0)
+
+  useEffect(() => {
+    loadPageCount()
+    console.log();
+  }, [])
 
   useEffect(() => {
     loadBugs()
@@ -25,6 +31,7 @@ export function BugIndex() {
       .then(() => {
         console.log('Deleted Succesfully!')
         setBugs(prevBugs => prevBugs.filter((bug) => bug._id !== bugId))
+        loadPageCount()
         showSuccessMsg('Bug removed')
       })
       .catch((err) => {
@@ -37,7 +44,7 @@ export function BugIndex() {
     const bug = {
       title: prompt('Bug title?'),
       severity: +prompt('Bug severity?'),
-      description:prompt('Bug description?'),
+      description: prompt('Bug description?'),
     }
     bugService
       .save(bug)
@@ -69,16 +76,29 @@ export function BugIndex() {
         showErrorMsg('Cannot update bug')
       })
 
-    }
-    
-    function onSetFilterBy(filterBy) {
-      setFilterBy(prevFilter => ({ ...prevFilter, ...filterBy }))
+  }
+
+
+  function onSetFilterBy(filterBy) {
+    setFilterBy(prevFilter => ({ ...prevFilter, ...filterBy }))
+  }
+  function loadPageCount() {
+    bugService.getPageCount()
+      .then(pageCount => {
+        setPageCount(+pageCount)
+        console.log(+pageCount);
+      }
+      )
+      .catch(err => {
+        console.log('err:', err)
+        showErrorMsg('Cannot get page count')
+      })
   }
 
   return (
     <main>
       <h3>Bugs App</h3>
-      <BugFilter filterBy={filterBy} onSetFilterBy={debouncedSetFilterBy.current}/>
+      <BugFilter filterBy={filterBy} onSetFilterBy={debouncedSetFilterBy.current} pageCount={pageCount} />
       <main>
         <button onClick={onAddBug}>Add Bug ⛐</button>
         <BugList bugs={bugs} onRemoveBug={onRemoveBug} onEditBug={onEditBug} />

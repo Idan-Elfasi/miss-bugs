@@ -15,7 +15,7 @@ app.get('/api/bug', (req, res) => {
     const filterBy = {
         title: req.query.title || '',
         severity: +req.query.severity || 0,
-        // pageIdx: +req.query.pageIdx || 0,
+        pageIdx: +req.query.pageIdx || 0,
         // sortBy: req.query.sortBy || '',
         // sortDir: +req.query.sortDir || 1,
         labels: req.query.labels || []
@@ -58,6 +58,15 @@ app.post('/api/bug/', (req, res) => {
     bugService.save(bugToSave)
         .then(savedBug => res.send(savedBug))
 })
+app.get('/api/bug/pageCount', (req, res) => {
+    console.log('hiiiiiiiiiiii');
+    bugService.getPageCount()
+        .then(pageCount => res.send(pageCount + ''))
+        .catch(err => {
+            loggerService.error(`Couldn't get pageCount`, err)
+            res.status(500).send(`Couldn't get pageCount`)
+        })
+})
 
 app.get('/api/bug/:id', (req, res) => {
     const { id } = req.params
@@ -70,10 +79,6 @@ app.delete('/api/bug/:id', (req, res) => {
     const { id } = req.params
     bugService.remove(id)
         .then(() => res.send(`Bug ${id} deleted...`))
-})
-app.get('/puki', (req, res) => {
-
-    res.send(`Hello puki`)
 })
 
 
