@@ -33,24 +33,13 @@ export function BugFilter({ filterBy, onSetFilterBy, pageCount }) {
 
 
 
-    // function handleTitleChange({ target }) {
-    //     const value = target.value
-    //     setFilterByToEdit(prevFilter => ({ ...prevFilter, title: value }))
-    // }
-
-    // function handleSeverityChange({ target }) {
-    //     const value = target.value
-    //     setFilterByToEdit(prevFilter => ({ ...prevFilter, severity: value }))
-    // }
     function onGetPage(diff) {
         if (filterBy.pageIdx === 0 && diff === -1) return
         if (filterBy.pageIdx === pageCount - 1 && diff === 1) return
         setFilterByToEdit(prev => ({ ...prev, pageIdx: prev.pageIdx + diff }))
 
     }
-function setDirValueToNumber(){
-    
-}
+
     const { title, severity, sortBy, sortDir } = filterByToEdit
     return (
         <section className="bug-filter">
