@@ -80,6 +80,63 @@ app.delete('/api/bug/:id', (req, res) => {
         .then(() => res.send(`Bug ${id} deleted...`))
 })
 
+// AUTH API
+app.get('/api/user', (req, res) => {
+    userService.query()
+        .then((users) => {
+            res.send(users)
+        })
+        .catch((err) => {
+            console.log('Cannot load users', err)
+            res.status(400).send('Cannot load users')
+        })
+})
+
+app.get('/api/user/:userId', (req, res) => {
+    const {userId} = req.params
+    userService.getById(userId)
+        .then((user) => {
+            res.send(user)
+        })
+        .catch((err) => {
+            console.log('Cannot load user', err)
+            res.status(400).send('Cannot load user')
+        })
+})
+
+app.post('/api/auth/login', (req, res) => {
+    const credentials = req.body
+    userService.checkLogin(credentials)
+        .then(user => {
+            if (user) {
+                const loginToken = userService.getLoginToken(user)
+                res.cookie('loginToken', loginToken)
+                res.send(user)
+            } else {
+                res.status(401).send('Invalid Credentials')
+            }
+        })
+})
+
+app.post('/api/auth/signup', (req, res) => {
+    const credentials = req.body
+    userService.save(credentials)
+        .then(user => {
+            if (user) {
+                const loginToken = userService.getLoginToken(user)
+                res.cookie('loginToken', loginToken)
+                res.send(user)
+            } else {
+                res.status(400).send('Cannot signup')
+            }
+        })
+})
+
+app.post('/api/auth/logout', (req, res) => {
+    res.clearCookie('loginToken')
+    res.send('logged-out!')
+})
+
 app.get('/**', (req, res) => {
     res.sendFile(path.resolve('public/index.html'))
 })
