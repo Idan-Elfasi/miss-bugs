@@ -13,6 +13,7 @@ var bugs = utilService.readJsonFile('./data/bug.json')
 
 function query(filterBy={}) {
     var filterBugs=bugs
+    //filterring
     if (filterBy.title) {
         const regExp = new RegExp(filterBy.title, 'i')
         filterBugs = filterBugs.filter(bug => regExp.test(bug.title))
@@ -20,6 +21,17 @@ function query(filterBy={}) {
     if (filterBy.severity) {
         filterBugs = filterBugs.filter(bug => bug.severity >= filterBy.severity)
     }
+    //sorting 
+    if (filterBy.sortBy) {
+        if (filterBy.sortBy === 'title') {
+            filterBugs = filterBugs.sort((bug1, bug2) => bug1.title.localeCompare(bug2.title) * filterBy.sortDir)
+        } else if (filterBy.sortBy === 'severity') {
+            filterBugs = filterBugs.sort((bug1, bug2) => (bug1.severity - bug2.severity) * filterBy.sortDir)
+        } else if (filterBy.sortBy === 'createdAt') {
+            filterBugs = filterBugs.sort((bug1, bug2) => (bug1.createdAt - bug2.createdAt) * filterBy.sortDir)
+        }
+    }
+    //pagination 
     if(filterBy.pageIdx!==undefined){
         const startIdx = filterBy.pageIdx * PAGE_SIZE
         filterBugs = filterBugs.slice(startIdx, startIdx + PAGE_SIZE )

@@ -16,8 +16,8 @@ app.get('/api/bug', (req, res) => {
         title: req.query.title || '',
         severity: +req.query.severity || 0,
         pageIdx: +req.query.pageIdx || 0,
-        // sortBy: req.query.sortBy || '',
-        // sortDir: +req.query.sortDir || 1,
+        sortBy: req.query.sortBy || '',
+        sortDir: +req.query.sortDir || 1,
         labels: req.query.labels || []
     }
     bugService.query(filterBy)
@@ -59,7 +59,6 @@ app.post('/api/bug/', (req, res) => {
         .then(savedBug => res.send(savedBug))
 })
 app.get('/api/bug/pageCount', (req, res) => {
-    console.log('hiiiiiiiiiiii');
     bugService.getPageCount()
         .then(pageCount => res.send(pageCount + ''))
         .catch(err => {

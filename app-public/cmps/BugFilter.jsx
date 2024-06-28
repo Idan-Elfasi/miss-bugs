@@ -1,6 +1,6 @@
 const { useState, useEffect } = React
 
-export function BugFilter({ filterBy, onSetFilterBy,pageCount }) {
+export function BugFilter({ filterBy, onSetFilterBy, pageCount }) {
 
     const [filterByToEdit, setFilterByToEdit] = useState(filterBy)
 
@@ -20,12 +20,13 @@ export function BugFilter({ filterBy, onSetFilterBy,pageCount }) {
                 break;
 
             case 'checkbox':
-                value = target.checked
+            value= target.checked ?-1:1
                 break
 
             default:
                 break;
         }
+        
 
         setFilterByToEdit(prevFilter => ({ ...prevFilter, [field]: value }))
     }
@@ -41,29 +42,45 @@ export function BugFilter({ filterBy, onSetFilterBy,pageCount }) {
     //     const value = target.value
     //     setFilterByToEdit(prevFilter => ({ ...prevFilter, severity: value }))
     // }
-function onGetPage(diff){
-   if( filterBy.pageIdx===0 && diff===-1) return
-   if(filterBy.pageIdx===pageCount - 1 && diff===1) return
-    setFilterByToEdit(prev => ({ ...prev, pageIdx: prev.pageIdx+diff } ))
-    // let pageIdx = filterByToEdit.pageIdx + diff
-    // if (pageIdx < 0) pageIdx = pageCount - 1
-    // if (pageIdx > pageCount - 1) pageIdx = 0
-    // setFilterByToEdit(prev => ({ ...prev, pageIdx }))
-}
+    function onGetPage(diff) {
+        if (filterBy.pageIdx === 0 && diff === -1) return
+        if (filterBy.pageIdx === pageCount - 1 && diff === 1) return
+        setFilterByToEdit(prev => ({ ...prev, pageIdx: prev.pageIdx + diff }))
 
-    const { title, severity } = filterByToEdit
+    }
+function setDirValueToNumber(){
+    
+}
+    const { title, severity, sortBy, sortDir } = filterByToEdit
     return (
         <section className="bug-filter">
             <h2>Filter Our Bugs</h2>
-                <label htmlFor="title">Title: </label>
-                <input value={title} onChange={handleChange} type="text" placeholder="By Title" id="title" name="title" />
+            <label htmlFor="title">Title: </label>
+            <input value={title} onChange={handleChange} type="text" placeholder="By Title" id="title" name="title" />
 
-                <label htmlFor="severity">Severity: </label>
-                <input value={severity} onChange={handleChange} type="number" placeholder="By Severity" id="severity" name="severity" />
+            <label htmlFor="severity">Severity: </label>
+            <input value={severity} onChange={handleChange} type="number" placeholder="By Severity" id="severity" name="severity" />
 
-                <button onClick={() => onGetPage(-1)}>-</button>
-                <span>{filterByToEdit.pageIdx + 1}</span>
-                <button onClick={() => onGetPage(1)}>+</button>
+            <section className="sort-bugs">
+            <label htmlFor="sortBy">Sort by:</label>
+                <select name="sortBy" value={sortBy} onChange={handleChange}>
+                    <option value="">Select Sorting</option>
+                    <option value="title">Title</option>
+                    <option value="severity">Severity</option>
+                    <option value="createdAt">Created At</option>
+                </select>
+
+                <label htmlFor="sortDir">Sort descending:</label>
+                <input
+                    type="checkbox"
+                    name="sortDir"
+                    id="sortDir"
+                    onChange={handleChange}
+                />
+            </section>
+            <button onClick={() => onGetPage(-1)}>-</button>
+            <span>{filterByToEdit.pageIdx + 1}</span>
+            <button onClick={() => onGetPage(1)}>+</button>
         </section>
     )
 }

@@ -43,9 +43,9 @@ function getPageCount(){
     return axios.get(BASE_URL + '/pageCount').then(res => res.data)
 }
 function getEmptyBug(title = '', severity = '') {
-    return { title, severity }
+    return { title, severity}
 }
 
 function getDefaultFilter() {
-    return { title: '', severity: '',pageIdx:0 }
+    return { title: '', severity:'',pageIdx:0,sortBy:'',sortDir:1 }
 }
