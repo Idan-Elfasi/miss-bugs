@@ -1,12 +1,17 @@
 import express from 'express'
+import path from 'path'
+import cookieParser from 'cookie-parser'
 
 
 import { bugService } from './services/bug.service.js'
+import { userService } from './services/user.service.js'
 import { loggerService } from './services/logger.service.js'
 import { utilService } from './services/util.service.js'
 
 const app = express()
+
 app.use(express.static('app-public'))
+app.use(cookieParser())
 app.use(express.json())   
 
 // Express Routing:
@@ -138,7 +143,7 @@ app.post('/api/auth/logout', (req, res) => {
 })
 
 app.get('/**', (req, res) => {
-    res.sendFile(path.resolve('public/index.html'))
+    res.sendFile(path.resolve('app-public/index.html'))
 })
 
 const port = 3030
